@@ -1,135 +1,93 @@
-pragma solidity >=0.8.0 <0.9.0;
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: UNLICENSED
+pragma solidity ^0.8.11;
 
-// https://github.com/austintgriffith/scaffold-eth/tree/moonshot-bots-with-curve
+import "@openzeppelin/contracts-upgradeable/token/ERC721/extensions/ERC721URIStorageUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/utils/CountersUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/proxy/utils/UUPSUpgradeable.sol";
+import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
-//import "hardhat/console.sol";
-import "@openzeppelin/contracts/token/ERC721/extensions/ERC721Enumerable.sol";
-import "@openzeppelin/contracts/utils/Counters.sol";
+import "./lib/Base64.sol";
 
-//learn more: https://docs.openzeppelin.com/contracts/3.x/erc721
+/// @notice Contract is deliberately lacking withdraw, that will be added in the later version
+/// The plan is to spend that money on something that the DAO decides
+contract CityPassport is ERC721URIStorageUpgradeable, UUPSUpgradeable, OwnableUpgradeable {
 
-// GET LISTED ON OPENSEA: https://testnets.opensea.io/get-listed/step-two
+    uint public constant MINT_PRICE = 0.01 ether;
 
-contract ExampleNFT is ERC721Enumerable {
+    using CountersUpgradeable for CountersUpgradeable.Counter;
+    CountersUpgradeable.Counter private _tokenIds;
 
-    address payable public constant recipient =
-        payable(0x72Dc1B4d61A477782506186339eE7a897ba7d00A);
+    uint public version;
 
-    uint256 public constant limit = 21;
-    uint256 public constant curve = 1030; // price increase 3% with each purchase
-    uint256 public price = 0.0033 ether;
-
-
-    uint256 public currentSupply = 0;
-
-    using Counters for Counters.Counter;
-    Counters.Counter private _tokenIds;
-
-    string[] private uris;
-
-    constructor() ERC721("MoonShotBots", "MSB") {
-        uris = [
-            "Superior_Wiki.json",
-            "Homely_Word_processor.json",
-            "Abrupt_Paste.json",
-            "Hungry_Inbox.json",
-            "Acidic_Digital.json",
-            "Hungry_Windows.json",
-            "Adorable_Malware.json",
-            "Hurt_App.json",
-            "Adorable_Platform.json",
-            "Hurt_Bug.json",
-            "Adventurous_Hack.json",
-            "Hurt_Byte.json",
-            "Aggressive_Kernel.json",
-            "Hurt_Spyware.json",
-            "Alert_Flash.json",
-            "Icy_Hyperlink.json",
-            "Alert_Privacy.json",
-            "Ideal_Captcha.json",
-            "Alert_Status_bar.json",
-            "Ideal_Node.json",
-            "Aloof_Data.json"
-        ];
+    function initialize(string memory _tokenName, string memory _symbol, uint _version) public initializer {
+        __ERC721_init(_tokenName, _symbol);
+        __Ownable_init();
+        version = _version;
     }
 
-    function mintItem(address to) public payable returns (uint256) {
-        require(_tokenIds.current() < limit, "DONE MINTING");
-        require(msg.value >= price, "NOT ENOUGH");
-
-        price = (price * curve) / 1000;
-        currentSupply++;
-
+    /// @notice Function used to ming token. Sender needs to pay MINT_PRICE + gas
+    /// @param _to receiver of nft
+    function mint(address _to) public payable {
+        require(msg.value == MINT_PRICE, "Invalid amount");
         _tokenIds.increment();
-
         uint256 id = _tokenIds.current();
-        _mint(to, id);
-
-        (bool success, ) = recipient.call{value: msg.value}("");
-        require(success, "could not send");
-
-        return id;
+        _safeMint(_to, id);
     }
 
-    /**
-     * @notice Returns the baseURI
-     */
-    function _baseURI() internal view virtual override returns (string memory) {
-        return
-            "https://gateway.pinata.cloud/ipfs/QmdRmZ1UPSALNVuXY2mYPb3T5exn9in1AL3tsema4rY2QF/json/";
-    }
-
-    /**
-     * @notice Returns the token uri containing the metadata
-     * @param tokenId nft id
-     */
-    function tokenURI(uint256 tokenId)
-        public
-        view
-        virtual
-        override
-        returns (string memory)
-    {
-        require(
-            _exists(tokenId),
-            "ERC721Metadata: URI query for nonexistent token"
+    function tokenURI(uint tokenId) override(ERC721URIStorageUpgradeable) public view returns (string memory) {
+        string memory json = Base64.encode(
+            bytes(string(
+                abi.encodePacked(
+                    '{',
+                    '"image_data": "', _generateSvg(tokenId), '"',
+                    '}'
+                )
+            ))
         );
-        require(tokenId < limit, "Nonexistent token");
-
-        string memory baseURI = _baseURI();
-        return
-            bytes(baseURI).length > 0
-                ? string(abi.encodePacked(baseURI, uris[tokenId-1]))
-                : "";
+        return string(abi.encodePacked('data:application/json;base64,', json));
     }
 
-    /**
-     * @notice Returns current floor value
-     */
-    function floor() public view returns (uint256) {
-        if (currentSupply == 0) {
-            return address(this).balance;
+    function _uint2str(uint _i) internal pure returns (string memory _uintAsString) {
+        if (_i == 0) {
+            return "0";
         }
-        return address(this).balance / currentSupply;
+        uint j = _i;
+        uint len;
+        while (j != 0) {
+            len++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(len);
+        uint k = len;
+        while (_i != 0) {
+            k = k-1;
+            uint8 temp = (48 + uint8(_i - _i / 10 * 10));
+            bytes1 b1 = bytes1(temp);
+            bstr[k] = b1;
+            _i /= 10;
+        }
+        return string(bstr);
     }
 
-    /**
-     * @notice Executes a sale and updates the floor price
-     * @param _id nft id
-     */
-    function redeem(uint256 _id) external {
-        require(ownerOf(_id) == msg.sender, "Not Owner");
-        uint256 currentFloor = floor();
-        require(currentFloor > 0, "sale cannot be made until floor is established");
-        currentSupply--;
-        super._burn(_id);
-        (bool success, ) = msg.sender.call{value: currentFloor}("");
-        require(success, "sending floor price failed");
+    function _generateSvg(uint tokenId) private view returns (string memory) {
+        string memory encoded = Base64.encode(
+            bytes(string(
+                abi.encodePacked(
+                    "<svg version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='350' height='350'>",
+                    "<style>.heavy { font: bold 21px sans-serif; }</style>",
+                    "<rect x='0' y='0' width='350' height='350' stroke='#FFC338' stroke-width='0px' fill='white'/>",
+                    "<text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' class='heavy'>",
+                    "CityPassport #",
+                    _uint2str(tokenId),
+                    " of ",
+                    _uint2str(_tokenIds.current()),
+                    "</text></svg>"
+                )
+            ))
+        );
+
+        return string(abi.encodePacked("data:image/svg+xml;base64,", encoded));
     }
 
-    /**
-     * @notice For accepting eth
-     */
-    receive() external payable {}
+    function _authorizeUpgrade(address) internal override onlyOwner {}
 }
