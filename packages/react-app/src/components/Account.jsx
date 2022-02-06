@@ -76,17 +76,19 @@ export default function Account({
         </span>
       )}
       {web3Modal?.cachedProvider ? (
-        <Button
+        <div
+          class="redeem-bt"
           key="logoutbutton"
           style={{ verticalAlign: "top", marginLeft: 8, marginTop: 4 }}
           shape="round"
           size="large"
           onClick={logoutOfWeb3Modal}
         >
-          logout
-        </Button>
+          Logout
+        </div>
       ) : (
-        <Button
+        <div
+          class="redeem-bt"
           key="loginbutton"
           style={{ verticalAlign: "top", marginLeft: 8, marginTop: 4 }}
           shape="round"
@@ -94,8 +96,8 @@ export default function Account({
           /* type={minimized ? "default" : "primary"}     too many people just defaulting to MM and having a bad time */
           onClick={loadWeb3Modal}
         >
-          connect
-        </Button>
+          Connect
+        </div>
       )}
     </div>
   );

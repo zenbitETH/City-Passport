@@ -1,3 +1,123 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend+Deca&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=ABeeZee&display=swap');
+
 .App {
   text-align: center;
+  background-image: linear-gradient(to top, #141e30 30%, #01304E 75%);
+  background-size: 200% 200%;
+  height: 100vh;
+  font-family: "Lexend Deca"
+}
+
+.yellow {
+  color: #F6AF55;
+}
+
+.nav {
+	position: sticky;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 5em;
+	top: 0;
+}
+
+.logo {
+  margin: 2em 0 0 1em;
+  height: 100%;
+}
+
+.pass {
+ margin: 2em 0 2em 0;
+}
+
+.mint-bt {
+  background-color: #2A948E !important;
+  border: none;
+  padding: 0.5em 1em 0.5em 1em;
+  border-radius: 25px;
+  font-size: 1.5em;
+  width:50%;
+  margin: 0 0 0.5em 25%;
+}
+
+.mint-bt:hover {
+  cursor: pointer;
+  background: linear-gradient(45deg,  #1a5e5a96, #1a5e5a96,#2A948E, #2A948E);
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+}
+
+.redeem-bt {
+  background-color: #F6AF55 !important;
+  border: none;
+  padding: 0.5em 1em 0.5em 1em;
+  border-radius: 25px;
+  font-size: 1.5em;
+}
+
+.redeem-bt:hover {
+  background: linear-gradient(45deg,  #F6AF5596, #F6AF5596,#F6AF55, #F6AF55) !important;
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+  cursor: pointer;
+}
+
+.yolo-bt {
+  background-color: #2A948E !important;
+  border: none;
+  padding: 0.5em 1em 0.5em 1em;
+  margin: 0 40% 0 40%;
+  border-radius: 25px;
+  font-size: 1.5em;
+}
+
+.yolo-bt:hover {
+  background: linear-gradient(45deg,  #F6AF5596, #F6AF5596,#F6AF55, #F6AF55) !important;
+  background-size: 200% 200%;
+  animation: gradient 5s ease infinite;
+  cursor: pointer;
+}
+
+.input-eth {
+  background-color: #ffffff6e !important;
+  font-size: 1.5em !important;
+  border-radius: 25px !important;
+}
+
+.roadgrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  margin: 10em 0 5em 15%;
+}
+
+.dashboard {
+  background-image: linear-gradient(to bottom, #ffffff38, #ffffff00 75%);
+  margin: 3em 10% 3em 10%;
+  border-radius: 25px;
+  height: 80vh;
+}
+
+.dash-head {
+  text-align: left;
+  padding: 1.5em;
+}
+
+.dash-city {
+  font-size: 0.7em;
+  color: #F6AF55;
+}
+
+.dash-grid {
+  display: grid;
+  grid-template-columns: 1fr 0.25fr 0.5fr 1fr 1fr 0.25fr 0.25fr 0.25fr;
+  font-size: 1.5em;
+  grid-template-rows: 1fr 1fr 1fr;
+  height: 40%;
+}
+
+.nft-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  padding: 2em;
 }
