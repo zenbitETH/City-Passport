@@ -67,6 +67,7 @@
     ]
   },
   "dependencies": {
+    "@openzeppelin/hardhat-upgrades": "^1.14.0",
     "react-moralis": "^1.2.2"
   },
   "devDependencies": {

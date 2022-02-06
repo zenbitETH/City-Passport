@@ -17,7 +17,8 @@ const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeC
 
   usePoller(async () => {
     if (readContracts && address) {
-      const floorPrice = await readContracts.ExampleNFT.floor();
+      console.log('readContract :', readContracts)
+      const floorPrice = await readContracts.ExampleNFT.MINT_PRICE();
       setFloor(formatEther(floorPrice));
     }
   }, 1500);

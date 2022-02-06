@@ -47,15 +47,12 @@ const DashboardUI = () => {
   }
   getMintPrice();
 
-  const getTotalNumberOfProposals = async () => {
-    const total = await governorAlphaContract.proposalCount();
-    setTotalNumberOfProposals(total);
-  }
-  getTotalNumberOfProposals();
+  // const getTotalNumberOfProposals = async () => {
+  //   const total = await governorAlphaContract.proposalCount();
+  //   setTotalNumberOfProposals(total);
+  // }
+  // getTotalNumberOfProposals();
   
-  
-  // const signer = provider.getSigner();
-  // console.log("signer: ", signer);
 
   return (
     <div class="dashboard">
