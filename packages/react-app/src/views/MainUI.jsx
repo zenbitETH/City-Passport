@@ -24,7 +24,8 @@ const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeC
   }, 1500);
 
   const getTokenURI = async (ownerAddress, index) => {
-    const id = await readContracts.ExampleNFT.tokenOfOwnerByIndex(ownerAddress, index);
+    // const id = await readContracts.ExampleNFT.tokenOfOwnerByIndex(ownerAddress, index);
+    const id = 1;
     const tokenURI = await readContracts.ExampleNFT.tokenURI(id);
     const metadata = await axios.get(tokenURI);
     const approved = await readContracts.ExampleNFT.getApproved(id);
@@ -96,9 +97,9 @@ const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeC
             className="mint-bt"
           
             onClick={async () => {
-              const priceRightNow = await readContracts.ExampleNFT.price();
+              const priceRightNow = await readContracts.ExampleNFT.MINT_PRICE();
               try {
-                const txCur = await tx(writeContracts.ExampleNFT.mintItem(address, { value: priceRightNow }));
+                const txCur = await tx(writeContracts.ExampleNFT.mint(address, { value: priceRightNow }));
                 await txCur.wait();
               } catch (e) {
                 console.log("mint failed", e);
