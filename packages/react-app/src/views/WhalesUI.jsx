@@ -13,7 +13,7 @@ const WhalesUI = ({ readContracts, address, writeContracts, tx, userSigner }) =>
 
   usePoller(async () => {
     if (readContracts && address) {
-      const floorPrice = await readContracts.ExampleNFT.floor();
+      const floorPrice = await readContracts.ExampleNFT.MINT_PRICE();
       setFloor(formatEther(floorPrice));
     }
   }, 1500);
