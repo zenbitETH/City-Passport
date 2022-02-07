@@ -1,64 +1,47 @@
-# 🏗 scaffold-eth - Retroactive Public Goods Funding Starter Kit
+# City Passport
 
-> Deploy an NFT sale that has a mechanism where whales can yolo ETH to the NFT contract to raise the floor!
+We are developing a retroactive funding dashboard for crypto cities projects using the Cities Protocol. We are using the Scaffold Repo to mint an NFT with retroactive funding capabilities. To fetch the data from current prototypes and pilot testing we are using 3 projects developed at ETH global hackathons and a web2 repository with digitized urban processes:
 
+[Cities Protocol / Scaling Ethereum 2021](https://showcase.ethglobal.com/scaling/cities-protocol)
+[Qros / ETH Online 2021](https://showcase.ethglobal.com/ethonline2021/qros)
+[Graffiti Mint / NFT Hack 2022](https://showcase.ethglobal.com/nfthack2022/graffiti-mint)
 
-[![preview_rapgfsk](https://user-images.githubusercontent.com/2653167/141536524-ee17c022-9012-4092-b2fb-db352849ae03.jpg)](https://youtu.be/q0CBVeagpyg)
+[Proto DAO digitized documents](https://github.com/zenbitETH/ProtoDAO-Docs)
 
-[https://youtu.be/q0CBVeagpyg](https://youtu.be/q0CBVeagpyg)
+With City Passport we are unifying the data generated from these prototypes stored on Mumbai testnet and Polygon Mainnet, and making it available for City Passport minters to evaluate the project development and retroactive fund its achievements. 
+
+# Technologies used
+
+[1. Scaffold-eth](https://github.com/scaffold-eth/scaffold-eth)
+[2. Moralis](https://moralis.io)
+[3. Polygon Network](https://polygon.technology/)
 
 
 ## 🏃‍♀️ Quick Start
 
-required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Git](https://git-scm.com/downloads)
+required: [Node](https://nodejs.org/dist/latest-v12.x/) plus [Yarn](https://classic.yarnpkg.com/en/docs/install/) and [Moralis](https://moralis.io)
 
+Working with Polygon Mumbai testnet contracts (further update to deploy your own contracts)
 
-1. Clone the repo first
-```sh
-git clone -b nft-retroactive-funding https://github.com/austintgriffith/scaffold-eth.git nft-retroactive-funding
-cd nft-retroactive-funding
-```
-
-2. Install dependencies
+1. Install dependencies
 ```bash
 yarn install
 ```
 
-3. Spin up local chain
-```sh
-yarn chain
-```
-
-4. Deploy Contracts
-```sh
-yarn deploy
-```
-
-5. Start React frontend
+2. Start React frontend
 ```bash
 yarn start
 ```
 
-## Introduction
+3. 📱 Open http://localhost:3000 to see the app
 
-Mint an NFT with a price curve to raise a small amount of funding to a multisig. 
+4. Set your Metamask or other wallet to Polygon Mumbai Testnet to mint!
 
-Then, a whale can yolo ETH to the NFT contract to allow NFT holders to redeem for a floor price.
+## Contracts 
 
-The floor price is equal to the amount of ETH in the contract divided by the number of NFTs in circulation.
+[📚 City Passport:](https://mumbai.polygonscan.com/address/0xb062bdccbf34b4c5de7e8b6c795385e8d391331b)
 
-## UI
 
-The first screen allows the user to mint NFTs and burn them. Burning happens at the floor price and user gets some ETH for this.
 
-<img width="472" alt="Screenshot 2021-11-12 at 12 33 24 PM" src="https://user-images.githubusercontent.com/26670962/141425060-5d423763-c509-497a-972b-e409b2040c8b.png">
-
-The second screen is intended for whales who can "raise the floor" by depositing some ETH into the contract.
-
-![](./assets/floor.png)
-
-## Contact
-
-Join the [telegram support chat 💬](https://t.me/joinchat/KByvmRe5wkR-8F_zz6AjpA) to ask questions and find others building with 🏗 scaffold-eth!
 
 
