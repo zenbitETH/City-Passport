@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 
-import { Button, Input } from "antd";
+import {  Input } from "antd";
 import { formatEther, parseEther } from "@ethersproject/units";
 import { usePoller } from "eth-hooks";
+import stage1 from "../assets/stage1.png";
+import stage2 from "../assets/stage2.png";
+import stage3 from "../assets/stage3.png";
 
 const WhalesUI = ({ readContracts, address, writeContracts, tx, userSigner }) => {
   const [q, setQ] = useState("");
@@ -10,7 +13,7 @@ const WhalesUI = ({ readContracts, address, writeContracts, tx, userSigner }) =>
 
   usePoller(async () => {
     if (readContracts && address) {
-      const floorPrice = await readContracts.ExampleNFT.floor();
+      const floorPrice = await readContracts.ExampleNFT.MINT_PRICE();
       setFloor(formatEther(floorPrice));
     }
   }, 1500);
@@ -25,13 +28,18 @@ const WhalesUI = ({ readContracts, address, writeContracts, tx, userSigner }) =>
   };
 
   return (
-    <div style={{ maxWidth: 300, margin: "20px auto" }}>
-      <h2 style={{ marginBottom: "20px" }}>Increasing floor</h2>
+    <div>
+      <div class="roadgrid">
+        <img src={stage1}/>
+        <img src={stage2}/>
+        <img src={stage3}/>
+      </div>
       <div style={{ display: "flex", alignItems: "center", maxWidth: 300, margin: "0 auto", marginBottom: "10px" }}>
-        <label htmlFor="quantity" style={{ marginRight: 20, flexGrow: 1, flex: 1, textAlign: "left" }}>
-          Quantity:
+        <label htmlFor="quantity" style={{ flexGrow: 1, flex: 1, textAlign: "left" }}>
+        Retroactive Funding:
         </label>
         <Input
+          className ="input-eth"
           type="number"
           placeholder="1 ETH"
           id="quantity"
@@ -40,10 +48,10 @@ const WhalesUI = ({ readContracts, address, writeContracts, tx, userSigner }) =>
           onChange={e => setQ(e.target.value)}
         />
       </div>
-      <p style={{ textAlign: "left", marginTop: 15 }}>Current floor price = {floor.substr(0, 6)} ETH</p>
-      <Button disabled={q === ""} onClick={increaseFloor}>
+      <h2>Current floor price = {floor.substr(0, 6)} ETH</h2>
+      <div class="yolo-bt" disabled={q === ""} onClick={increaseFloor}>
         Deposit
-      </Button>
+      </div>
     </div>
   );
 };

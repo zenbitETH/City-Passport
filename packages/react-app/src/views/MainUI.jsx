@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Button } from "antd";
+
 import { ethers } from "ethers";
 import axios from "axios";
 
 import { formatEther } from "@ethersproject/units";
 import { usePoller } from "eth-hooks";
+
+import passport from "../assets/citypass.png"
 
 const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeContracts }) => {
   const [collection, setCollection] = useState({
@@ -15,13 +17,15 @@ const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeC
 
   usePoller(async () => {
     if (readContracts && address) {
-      const floorPrice = await readContracts.ExampleNFT.floor();
+      console.log('readContract :', readContracts)
+      const floorPrice = await readContracts.ExampleNFT.MINT_PRICE();
       setFloor(formatEther(floorPrice));
     }
   }, 1500);
 
   const getTokenURI = async (ownerAddress, index) => {
-    const id = await readContracts.ExampleNFT.tokenOfOwnerByIndex(ownerAddress, index);
+    // const id = await readContracts.ExampleNFT.tokenOfOwnerByIndex(ownerAddress, index);
+    const id = 1;
     const tokenURI = await readContracts.ExampleNFT.tokenURI(id);
     const metadata = await axios.get(tokenURI);
     const approved = await readContracts.ExampleNFT.getApproved(id);
@@ -74,33 +78,28 @@ const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeC
     <div style={{ maxWidth: 768, margin: "20px auto" }}>
       {address ? (
         <>
-          <div style={{ display: "grid", margin: "0 auto" }}>
-            <h3 style={{ marginBottom: 25 }}>My collection: </h3>
-            {collection.items.length === 0 && <p>Your collection is empty</p>}
+          <div >
+            <img src={passport} class="pass"/>
+            {collection.items.length === 0 && <h2 class="yellow">You don't have a City Passport yet</h2>}
             {collection.items.length > 0 &&
               collection.items.map(item => (
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto" }}>
-                  <img
-                    style={{ maxWidth: "150px", display: "block", margin: "0 auto", marginBottom: "20px" }}
-                    src={item.image}
-                    alt="ExampleNFT"
-                  />
-                  <div style={{ marginLeft: "20px" }}>
-                      <Button style={{ width: "100%", minWidth: 100 }} onClick={() => redeem(item.id)}>
-                        Redeem
-                      </Button>
+                  <div>
+                      <div class="redeem-bt" onClick={() => redeem(item.id)}>
+                        Redeem physical passport
+                      </div>
                   </div>
                 </div>
               ))}
           </div>
-          <p style={{ textAlign: "center", marginTop: 15 }}>Current floor price = {floor.substr(0, 6)} ETH</p>
-          <Button
-            style={{ marginTop: 15 }}
-            type="primary"
+          
+          <div
+            className="mint-bt"
+          
             onClick={async () => {
-              const priceRightNow = await readContracts.ExampleNFT.price();
+              const priceRightNow = await readContracts.ExampleNFT.MINT_PRICE();
               try {
-                const txCur = await tx(writeContracts.ExampleNFT.mintItem(address, { value: priceRightNow }));
+                const txCur = await tx(writeContracts.ExampleNFT.mint(address, { value: priceRightNow }));
                 await txCur.wait();
               } catch (e) {
                 console.log("mint failed", e);
@@ -108,13 +107,14 @@ const MainUI = ({ loadWeb3Modal, address, tx, priceToMint, readContracts, writeC
               loadCollection();
             }}
           >
-            MINT for Ξ{priceToMint && (+ethers.utils.formatEther(priceToMint)).toFixed(4)}
-          </Button>
+            MINT for  {priceToMint && (+ethers.utils.formatEther(priceToMint)).toFixed(4)} Ξ
+          </div>
+          <h2>Current floor price = {floor.substr(0, 6)} ETH</h2>
         </>
       ) : (
-        <Button key="loginbutton" type="primary" onClick={loadWeb3Modal}>
+        <div key="loginbutton" type="primary" onClick={loadWeb3Modal}>
           Connect to mint
-        </Button>
+        </div>
       )}
     </div>
   );
