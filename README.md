@@ -1,4 +1,5 @@
 # City Passport
+## Developed @ Road to Web3 2022 Hackathon
 
 We are developing a retroactive funding dashboard for crypto cities projects using the Cities Protocol. We are using the Scaffold Repo to mint an NFT with retroactive funding capabilities. To fetch the data from current prototypes and pilot testing we are using 3 projects developed at ETH global hackathons and a web2 repository with digitized urban processes:
 
